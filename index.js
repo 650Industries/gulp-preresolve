@@ -11,7 +11,7 @@ const PLUGIN_NAME = 'gulp-preresolve';
 function gulpPreresolver(opts) {
 
   // Creating a stream through which each file will pass
-  var stream = through.obj(function (file, enc, callback) {
+  var stream = through2.obj(function (file, enc, callback) {
     if (file.isNull()) {
       this.push(file); // Do nothing if no contents
       return callback();
