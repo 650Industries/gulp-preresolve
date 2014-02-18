@@ -12,8 +12,7 @@ module.exports = function() {
     }
 
     if (isBuffer) {
-        file.contents = preresolve(file);
-      }
+      file.contents = preresolve(file);
       return callback(null, file);
     }
 
