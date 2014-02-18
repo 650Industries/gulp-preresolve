@@ -1,33 +1,18 @@
 var es = require('event-stream');
-var rs = require('replacestream');
+var preresolve = require('preresolve');
 var stream = require('stream');
 
-module.exports = function(search, replacement) {
+module.exports = function() {
   var doReplace = function(file, callback) {
-    var isRegExp = search instanceof RegExp;
     var isStream = file.contents && typeof file.contents.on === 'function' && typeof file.contents.pipe === 'function';
-    var isBuffer = file.contents instanceof Buffer;
-
-    if (isRegExp && isStream) {
-      return callback(new Error('gulp-replace: Cannot do regexp replace on a stream'), file);
-    }
-
-    if (!isRegExp && typeof replacement === 'function') {
-      return callback(new Error('gulp-replace: Cannot do string replace with a function as replacement value'), file);
-    }
+    var isBuffer = Buffer.isBuffer(file.contents);
 
     if (isStream) {
-      file.contents = file.contents.pipe(rs(search, replacement));
-      return callback(null, file);
+      return callback(new Error('gulp-preresolve: Cannot do preresolution replace on a stream'), file);
     }
 
     if (isBuffer) {
-      if (isRegExp) {
-        file.contents = new Buffer(String(file.contents).replace(search, replacement));
-      }
-      else {
-        file.contents = new Buffer(String(file.contents).split(search).join(replacement));
-      }
+      file.contents = preresolve(file);
       return callback(null, file);
     }
 
