@@ -18,7 +18,9 @@ function gulpPreresolver(opts) {
     }
 
     if (file.isBuffer()) {
-      this.push(new Buffer("abc", "utf-8"));
+      //this.push(new Buffer("abc", "utf-8"));
+      file.contents = new Buffer("modified =P", "utf-8");
+      this.push(file);
       //this.push(preresolve(file));
       return callback();
     }
