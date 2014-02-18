@@ -1,0 +1,29 @@
+{
+  "name": "gulp-preresolve",
+  "version": "0.0.0",
+  "description": "gulp-preresolve ===============",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/650Industries/gulp-preresolve.git"
+  },
+  "keywords": [
+    "gulp",
+    "preresolve",
+    "build"
+  ],
+  "author": "650 Industries",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/650Industries/gulp-preresolve/issues"
+  },
+  "homepage": "https://github.com/650Industries/gulp-preresolve",
+  "dependencies": {
+    "preresolve": "650Industries/preresolve",
+    "event-stream": "~3.1.0",
+    "stream": "0.0.1"
+  }
+}
