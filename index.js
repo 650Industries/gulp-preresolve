@@ -1,23 +1,35 @@
-var es = require('event-stream');
+// through2 is a thin wrapper around node transform streams
+var through2 = require('through2');
+var gutil = require('gulp-util');
 var preresolve = require('preresolve');
-var stream = require('stream');
+var PluginError = gutil.PluginError;
 
-module.exports = function() {
-  var doReplace = function(file, callback) {
-    var isStream = file.contents && typeof file.contents.on === 'function' && typeof file.contents.pipe === 'function';
-    var isBuffer = Buffer.isBuffer(file.contents);
+// Consts
+const PLUGIN_NAME = 'gulp-preresolve';
 
-    if (isStream) {
-      return callback(new Error('gulp-preresolve: Cannot do preresolution replace on a stream'), file);
+// Plugin level function (dealing with files)
+function gulpPreresolver(opts) {
+
+  // Creating a stream through which each file will pass
+  var stream = through.obj(function (file, enc, callback) {
+    if (file.isNull()) {
+      this.push(file); // Do nothing if no contents
+      return callback();
     }
 
-    if (isBuffer) {
-      file.contents = preresolve(file);
-      return callback(null, file);
+    if (file.isBuffer()) {
+      this.push(preresolve(file));
+      return callback();
     }
 
-    callback(null, file);
-  };
+    if (file.isStream()) {
+      throw PluginError(PLUGIN_NAME, "Can't operate on streams yet :(");
+    }
+  });
 
-  return es.map(doReplace);
+  // returning the file stream
+  return stream;
 };
+
+// Exporting the plugin main function
+module.exports = gulpPreresolver;
